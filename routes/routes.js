@@ -1,24 +1,16 @@
 const express = require('express');
 
+const userController = require('../controllers/users');
+const errorController = require('../controllers/errors');
+
 const router = express.Router();
 
-const users = [];
+router.get('/', userController.getUser);
 
-router.get('/', (req, res, next) => {
-	res.render('user', { usersToDisplay: users, docTitle: 'User' });
-});
+router.get('/add-user', userController.getAddUser);
 
-router.get('/add-user', (req, res, next) => {
-	res.render('add-user', { docTitle: 'Add User' });
-});
+router.post('/add-user', userController.postAddUser);
 
-router.post('/add-user', (req, res, next) => {
-	users.push({ name: req.body.userName, id: req.body.userID });
-	res.redirect('/');
-});
-
-router.use((req, res, next) => {
-	res.status(404).render('error-404', { docTitle: 'Error 404: Not Found' });
-});
+router.use(errorController.error404);
 
 module.exports = router;
